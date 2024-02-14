@@ -35,7 +35,6 @@ export async function removeContact(contactId) {
     const contacts = await listContact();
 
     const index = contacts.findIndex(el => el.id === contactId);
-    console.log('index', index)
     if (index === -1) return null;
 
     const [result] = contacts.splice(index, 1);
@@ -45,7 +44,7 @@ export async function removeContact(contactId) {
     return result;
 }
 
-export async function updateContactById(contactId, data) {
+export async function updateContact(contactId, data) {
     const contacts = await listContact();
 
     const index = contacts.findIndex(el => el.id === contactId);

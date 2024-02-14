@@ -17,16 +17,14 @@ export const getOneContact = async (req, res) => {
     const { id } = req.params;
     const result = await getContactById(id);
     if (!result) {
-        throw HttpError(400)
+        throw HttpError(404)
     }
     res.json(result);
 };
 
 export const deleteContact = async(req, res) => {
     const { id } = req.params;
-    console.log('id', id)
     const result = await removeContact(id);
-    console.log('result', result)
     if (!result) {
         throw HttpError(404)
     }
@@ -35,7 +33,6 @@ export const deleteContact = async(req, res) => {
     })
 };
 
-
 export const createContact = async (req, res) => {
     const result = await addContact(req.body);
     res.status(201).json(result);
@@ -43,9 +40,9 @@ export const createContact = async (req, res) => {
 
 export const updateContact = async (req, res) => {
     const { id } = req.params;
-    const result = await updateContactById(id, req.body);
+    const result = await updateContact(id, req.body);
     if (!result) {
-        throw HttpError(400)
+        throw HttpError(404) //message="Body must have at least one field"
     }
     res.json(result);
 };
