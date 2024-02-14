@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import fs from "node:fs/promises";
-import { contactsPath } from "../path.js";
+import { contactsPath } from "../pathContacts.js";
+
 
 export async function listContact() {
     const data = await fs.readFile(contactsPath);
