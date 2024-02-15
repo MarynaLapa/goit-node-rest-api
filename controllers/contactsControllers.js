@@ -5,7 +5,7 @@ import {
     getContactById,
     addContact,
     removeContact,
-    updateContactById,
+    updateContact,
 } from "../services/contactsServices.js";
 
 const getAllContacts = async(req, res) => {
@@ -42,7 +42,7 @@ export const updateContact = async (req, res) => {
     const { id } = req.params;
     const result = await updateContact(id, req.body);
     if (!result) {
-        throw HttpError(404) //message="Body must have at least one field"
+        throw HttpError(404) 
     }
     res.json(result);
 };
