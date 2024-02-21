@@ -1,30 +1,25 @@
 import HttpError from "../helpers/HttpError.js";
 import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
-import {
-    listContact,
-    getContactById,
-    addContact,
-    removeContact,
-    updateContact,
-} from "../services/contactsServices.js";
+import Contact from "../models/contaсt.js";
+
 
 const getAllContacts = async(req, res) => {
-    const result = await listContact();
+    const result = await Contact.find({}, "-createdAt -updatedAt");
     res.json(result)
 };
 
 export const getOneContact = async (req, res) => {
     const { id } = req.params;
-    const result = await getContactById(id);
+    const result = await Contact.findById(id);
     if (!result) {
-        throw HttpError(404)
+        throw HttpError(400)
     }
     res.json(result);
 };
 
 export const deleteContact = async(req, res) => {
     const { id } = req.params;
-    const result = await removeContact(id);
+    const result = await Contact.findByIdAndDelete(id);
     if (!result) {
         throw HttpError(404)
     }
@@ -34,18 +29,29 @@ export const deleteContact = async(req, res) => {
 };
 
 export const createContact = async (req, res) => {
-    const result = await addContact(req.body);
+    const result = await Contact.create(req.body);
     res.status(201).json(result);
 };
 
 export const updateContact = async (req, res) => {
     const { id } = req.params;
-    const result = await updateContact(id, req.body);
+    const result = await Contact.findByIdAndUpdate(id, req.body, {new: true});
     if (!result) {
-        throw HttpError(404) 
+        throw HttpError(400)
     }
     res.json(result);
 };
+
+export const updateStatusContact = async (req, res) => {
+    const { id } = req.params;
+    console.log('req.body', req.body)
+    const result = await Contact.findByIdAndUpdate(id, req.body, {new: true});
+    console.log('result', result)
+    if (!result) {
+        throw HttpError(404);
+    }
+    res.json(result);
+}
 
 const controllers = {
     getAllContacts: ctrlWrapper(getAllContacts),
@@ -53,6 +59,7 @@ const controllers = {
     deleteContact: ctrlWrapper(deleteContact),
     createContact: ctrlWrapper(createContact),
     updateContact: ctrlWrapper(updateContact),
+    updateStatusContact: ctrlWrapper(updateStatusContact),
 };
 
 export default controllers;
