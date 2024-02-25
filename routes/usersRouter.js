@@ -17,10 +17,10 @@ usersRouter.post('/logout', authenticate, controllers.logout);
 
 usersRouter.get("/", controllers.getAllUsers);
 
-usersRouter.get("/:id", isValidId, controllers.getOneUser);
+usersRouter.get("/:id", controllers.getOneUser);
 
-usersRouter.post("/:id", isValidId, controllers.deleteUser);
+usersRouter.delete("/:id", controllers.deleteUser);
 
-usersRouter.patch('/:id/subscription', authenticate, validateBody(subscriptionSchema), controllers.updateSubscription);
+usersRouter.patch('/subscription', authenticate, validateBody(subscriptionSchema), controllers.updateSubscription);
 
 export default usersRouter;
