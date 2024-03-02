@@ -4,6 +4,7 @@ import Contact from "../models/contact.js";
 
 const getAllContacts = async (req, res) => {
     const { _id: owner } = req.user;
+    console.log('first', owner)
     const { page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
 
@@ -15,17 +16,15 @@ const getAllContacts = async (req, res) => {
 };
 
 const getOneContact = async (req, res) => {
-    const { id } = req.params;
-    const result = await Contact.findById(id);
+    const result = await Contact.findOne({_id: req.params.id, owner: req.user._id })
     if (!result) {
-        throw HttpError(400)
-    }
+        throw HttpError(404)
+    };
     res.json(result);
 };
 
 const deleteContact = async(req, res) => {
-    const { id } = req.params;
-    const result = await Contact.findByIdAndDelete(id);
+    const result = await Contact.findOneAndDelete({_id: req.params.id, owner: req.user._id });
     if (!result) {
         throw HttpError(404)
     }
@@ -42,8 +41,7 @@ const createContact = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
-    const { id } = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body, {new: true});
+    const result = await Contact.findOneAndUpdate({_id: req.params.id, owner: req.user._id }, req.body, {new: true});
     if (!result) {
         throw HttpError(400)
     }
@@ -51,8 +49,7 @@ const updateContact = async (req, res) => {
 };
 
 const updateStatusContact = async (req, res) => {
-    const { id} = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body, {new: true});
+    const result = await Contact.findOneAndUpdate({_id: req.params.id, owner: req.user._id }, req.body, {new: true});
     if (!result) {
         throw HttpError(404);
     }
