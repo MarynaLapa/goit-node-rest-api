@@ -2,8 +2,8 @@ import express from 'express';
 import controllers from '../controllers/usersControllers.js';
 import validateBody from '../helpers/validateBody.js';
 import authenticate from '../middlewares/authenticate.js';
-import { isValidId } from '../middlewares/isValidid.js';
-import { loginSchema, registerSchema, subscriptionSchema } from '../schemas/usersSchema.js';
+import { avatarSchema, loginSchema, registerSchema, subscriptionSchema } from '../schemas/usersSchema.js';
+import upload from './../middlewares/upload.js';
 
 const usersRouter = express.Router();
 
@@ -22,5 +22,7 @@ usersRouter.get("/:id", controllers.getOneUser);
 usersRouter.delete("/:id", controllers.deleteUser);
 
 usersRouter.patch('/subscription', authenticate, validateBody(subscriptionSchema), controllers.updateSubscription);
+
+usersRouter.patch('/avatars', upload.single('avatarURL'), authenticate, controllers.updateAvatar); //validateBody(avatarSchema),
 
 export default usersRouter;

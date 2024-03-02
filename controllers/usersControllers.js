@@ -1,3 +1,7 @@
+import fs from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from 'url';
+
 import HttpError from "../helpers/HttpError.js";
 import User from "../models/user.js"
 import { ctrlWrapper } from './../helpers/ctrlWrapper.js';
@@ -40,11 +44,27 @@ const updateSubscription = async (req, res) => {
     res.json(result);
 }
 
+const updateAvatar = async (req, res) => {
+    console.log('req.body', req.body)
+    console.log('req.file', req.file)
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+    const userDir = path.join(__dirname, "../public", "books");
+    console.log('userDir', userDir)
+    const { path: tempUpload, originalname } = req.file;
+    console.log('tempUpload', tempUpload)
+    console.log('originalname', originalname)
+    const resultUpload = path.join(userDir, originalname);
+    
+    await fs.rename(tempUpload, resultUpload);
+};
+
 const controllers = {
     getAllUsers: ctrlWrapper(getAllUsers),
     getOneUser: ctrlWrapper(getOneUser),
     deleteUser: ctrlWrapper(deleteUser),
     updateSubscription: ctrlWrapper(updateSubscription),
+    updateAvatar: ctrlWrapper(updateAvatar),
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     current: ctrlWrapper(current),

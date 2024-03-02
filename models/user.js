@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import { handleMongooseError } from "../helpers/handleMongooseError.js";
 
-export const emailRegaxp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+export const emailRegaxp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export const subscriptionEnum = ["starter", "pro", "business"];
 
@@ -21,6 +21,10 @@ const userSchema = new Schema({
         type: String,
         enum: subscriptionEnum,
         default: "starter",
+    },
+    avatarURL: {
+        type: String,
+        required: false,
     },
     token: {
         type: String,
