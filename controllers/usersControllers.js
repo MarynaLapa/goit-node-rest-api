@@ -45,18 +45,17 @@ const updateSubscription = async (req, res) => {
 }
 
 const updateAvatar = async (req, res) => {
-    console.log('req.body', req.body)
-    console.log('req.file', req.file)
+    const { id } = req.user;
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-    const userDir = path.join(__dirname, "../public", "books");
-    console.log('userDir', userDir)
+    const userDir = path.join(__dirname, "../public", "avatars");
     const { path: tempUpload, originalname } = req.file;
-    console.log('tempUpload', tempUpload)
-    console.log('originalname', originalname)
     const resultUpload = path.join(userDir, originalname);
-    
     await fs.rename(tempUpload, resultUpload);
+    const avatarUrl = path.join("avatars", originalname);
+    console.log('avatarUrl', avatarUrl)
+    const result = await User.findByIdAndUpdate(id, { avatar: avatarUrl })
+    
+    res.json(result);
 };
 
 const controllers = {
