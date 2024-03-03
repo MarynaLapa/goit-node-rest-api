@@ -16,7 +16,3 @@ export const loginSchema = Joi.object({
 export const subscriptionSchema = Joi.object({
     subscription: Joi.string().valid(...subscriptionEnum).required(),
 });
-
-export const avatarSchema = Joi.object({
-    avatarURL: Joi.string().required()
-})

@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from 'url';
+import Jimp from "jimp";
 
 import HttpError from "../helpers/HttpError.js";
 import User from "../models/user.js"
@@ -45,17 +46,35 @@ const updateSubscription = async (req, res) => {
 }
 
 const updateAvatar = async (req, res) => {
-    const { id } = req.user;
+    const { _id } = req.user;
+
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
-    const userDir = path.join(__dirname, "../public", "avatars");
+    const avatarDir = path.join(__dirname, "../", "public", "avatars");
+
     const { path: tempUpload, originalname } = req.file;
-    const resultUpload = path.join(userDir, originalname);
-    await fs.rename(tempUpload, resultUpload);
-    const avatarUrl = path.join("avatars", originalname);
-    console.log('avatarUrl', avatarUrl)
-    const result = await User.findByIdAndUpdate(id, { avatar: avatarUrl })
+
+    const filename = `${_id}_${originalname}`;
+    await Jimp.read(tempUpload)
+        .then((image) => {
+            return image
+                .resize(250, 250) 
+                .write(filename); 
+        })
+        .catch((err) => {
+            console.error(err);
+        });
     
-    res.json(result);
+    const resultUpload = path.join(avatarDir, filename);
+
+    await fs.rename(tempUpload, resultUpload);
+
+    const avatarURL = path.join("avatars", filename);
+
+    await User.findByIdAndUpdate(_id, { avatarURL });
+
+    res.json({
+        avatarURL
+    });
 };
 
 const controllers = {
