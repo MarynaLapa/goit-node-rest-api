@@ -30,6 +30,11 @@ const userSchema = new Schema({
         type: String,
         default: null,
     },
+    verify: {
+        type: Boolean,
+        default: false
+    },
+    verificationCode
 }, { versionKey: false, timestamps: true });
 
 userSchema.post("save", handleMongooseError);
