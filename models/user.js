@@ -32,9 +32,12 @@ const userSchema = new Schema({
     },
     verify: {
         type: Boolean,
-        default: false
+        default: false,
     },
-    verificationCode
+    verificationToken: {
+        type: String,
+        required: [true, 'Verify token is required'],
+    }
 }, { versionKey: false, timestamps: true });
 
 userSchema.post("save", handleMongooseError);
