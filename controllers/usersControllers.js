@@ -1,3 +1,8 @@
+import fs from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from 'url';
+import Jimp from "jimp";
+
 import HttpError from "../helpers/HttpError.js";
 import User from "../models/user.js"
 import { ctrlWrapper } from './../helpers/ctrlWrapper.js';
@@ -40,11 +45,44 @@ const updateSubscription = async (req, res) => {
     res.json(result);
 }
 
+const updateAvatar = async (req, res) => {
+    const { _id } = req.user;
+
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    const avatarDir = path.join(__dirname, "../", "public", "avatars");
+
+    const { path: tempUpload, originalname } = req.file;
+
+    const filename = `${_id}_${originalname}`;
+    await Jimp.read(tempUpload)
+        .then((image) => {
+            return image
+                .resize(250, 250) 
+                .write(filename); 
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+    
+    const resultUpload = path.join(avatarDir, filename);
+
+    await fs.rename(tempUpload, resultUpload);
+
+    const avatarURL = path.join("avatars", filename);
+
+    await User.findByIdAndUpdate(_id, { avatarURL });
+
+    res.json({
+        avatarURL
+    });
+};
+
 const controllers = {
     getAllUsers: ctrlWrapper(getAllUsers),
     getOneUser: ctrlWrapper(getOneUser),
     deleteUser: ctrlWrapper(deleteUser),
     updateSubscription: ctrlWrapper(updateSubscription),
+    updateAvatar: ctrlWrapper(updateAvatar),
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     current: ctrlWrapper(current),
