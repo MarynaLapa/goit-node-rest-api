@@ -10,6 +10,7 @@ import register from './authControllers/register.js';
 import login from './authControllers/login.js';
 import current from './authControllers/current.js';
 import logout from './authControllers/logout.js';
+import verifyEmail from "./authControllers/verifyEmail.js";
 
 const getAllUsers = async (req, res) => {
     const result = await User.find({}, "-createdAt -updatedAt");
@@ -84,6 +85,7 @@ const controllers = {
     updateSubscription: ctrlWrapper(updateSubscription),
     updateAvatar: ctrlWrapper(updateAvatar),
     register: ctrlWrapper(register),
+    verifyEmail: ctrlWrapper(verifyEmail),
     login: ctrlWrapper(login),
     current: ctrlWrapper(current),
     logout: ctrlWrapper(logout),

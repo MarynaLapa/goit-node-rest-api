@@ -25,4 +25,6 @@ usersRouter.patch('/subscription', authenticate, validateBody(subscriptionSchema
 
 usersRouter.patch('/avatars', authenticate, upload.single('avatar'), controllers.updateAvatar); 
 
+usersRouter.get("/verify/:verificationToken", controllers.verifyEmail)
+
 export default usersRouter;
