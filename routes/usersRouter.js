@@ -2,7 +2,7 @@ import express from 'express';
 import controllers from '../controllers/usersControllers.js';
 import validateBody from '../helpers/validateBody.js';
 import authenticate from '../middlewares/authenticate.js';
-import { loginSchema, registerSchema, subscriptionSchema } from '../schemas/usersSchema.js';
+import { loginSchema, registerSchema, subscriptionSchema, verifyEmailSchema } from '../schemas/usersSchema.js';
 import upload from './../middlewares/upload.js';
 
 const usersRouter = express.Router();
@@ -25,6 +25,8 @@ usersRouter.patch('/subscription', authenticate, validateBody(subscriptionSchema
 
 usersRouter.patch('/avatars', authenticate, upload.single('avatar'), controllers.updateAvatar); 
 
-usersRouter.get("/verify/:verificationToken", controllers.verifyEmail)
+usersRouter.get("/verify/:verificationToken", controllers.verifyEmail);
+
+usersRouter.post("/verify", validateBody(verifyEmailSchema), controllers.resendVerifyEmail)
 
 export default usersRouter;

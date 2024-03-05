@@ -1,6 +1,5 @@
 import HttpError from "../helpers/HttpError.js";
 import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
-
 import Contact from "../models/contact.js";
 
 const getAllContacts = async (req, res) => {

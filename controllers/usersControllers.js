@@ -11,6 +11,7 @@ import login from './authControllers/login.js';
 import current from './authControllers/current.js';
 import logout from './authControllers/logout.js';
 import verifyEmail from "./authControllers/verifyEmail.js";
+import resendVerifyEmail from "./authControllers/resendVerifyEmail.js";
 
 const getAllUsers = async (req, res) => {
     const result = await User.find({}, "-createdAt -updatedAt");
@@ -86,6 +87,7 @@ const controllers = {
     updateAvatar: ctrlWrapper(updateAvatar),
     register: ctrlWrapper(register),
     verifyEmail: ctrlWrapper(verifyEmail),
+    resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
     login: ctrlWrapper(login),
     current: ctrlWrapper(current),
     logout: ctrlWrapper(logout),
